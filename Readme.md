@@ -8,11 +8,13 @@
 
 ### 3. URL 설정
 
-### 4. View에서 하는 일 (1)
+### 4. View에서 하는 일
 
-### 5. Django Templates Language
+### 5. Variable Routing
 
-### 6. Model 기초
+### 6. Django Templates Language
+
+### 7. Model 기초
 
 
 
@@ -81,6 +83,18 @@ USE_TZ = True
 STATIC_URL = '/static/'
 ```
 
+- manage.py
+
+명령어와 관련된 코드가 들어 있다.
+
+- wsgi.py
+
+web server gateway interface의 약자이다. 배포와 관련한 코드가 들어 있다.
+
+- \__init\_\_.py
+
+안에는 비어 있지만 묘듈로 사용하기 위해 삭제하면 안 된다.
+
 ### 3. URL 설정
 
 프로젝트 이름의 디렉토리에서 한번 분기하고 각 앱 안에서 한번 더 분기한다. path의 첫번째 인자에 url 문자열이 들어오는데 반드시 `/`로 끝내준다.
@@ -105,4 +119,124 @@ urlpatterns = [
 ```
 
 
+
+### 4. View에서 하는 일
+
+```python
+from django.shortcuts import render
+
+def index(request):
+    context = {
+        'info' : info,
+    }
+    render render(request, 'index.html', context)
+```
+
+함수이름을 정의하고 첫번째 인자로 'request'를 받는다. 반환할 때는 첫번째 인자로 request, 두번째 인자로 반환하고자 하는 페이지, 세번째로는 전달하려는 데이터를 딕셔너리 형태로 보내준다. 함수 안에서 데이터를 처리해서 처리가 끝난 데이터를 context에 dictionary 형태로 전달한다.
+
+### 5. Variable Routing
+
+> url의 특정 위치의 값을 변수로 활용
+
+#### 5.1 `urls.py`
+
+```python
+urlpatterns = [
+	path('user/<str:name>/', views.index),
+]
+```
+
+#### 5.2 `views.py`
+
+```python
+def index(request, name):
+    context = {
+        name : 'name',
+    }
+    render(request, 'index.html', context)
+```
+
+함수의 첫번째 인자인 request는 바꿔도 된다. 반환할 때 같은 이름으로 바꿔주면 동작은 한다. 하지만 컨벤션을 절대 바꾸면 안된다. urls.py에서 넘어오는 변수 이름은 views.py에서 두번째 인자 이름과 같아야 한다. 
+
+### 6. DTL
+
+#### 6.1 기본 문법
+
+- {{}}
+- 변수의 길이 : {{ variable|length }}
+- 출력되는 길이의 제한 : {{ variable|truncatechars:10 }}
+- |는 `필터`라고 부른다. 
+
+#### 6.2 문법
+
+- {% %}
+
+- for
+
+  - 기본 for 문
+
+  ```django
+  {% for article in articles %}
+  <!-- do something -->
+  {% endfor %}
+  ```
+
+  - {% empty %}를 쓰면 views.py에서 전달 받은 배열이 비었는데 순회할 경우 실행할 부분을 정의해 줄 수 있음
+
+  ```django
+  {% for article in articles %}
+  <!-- do something -->
+  {% empty %}
+  <!-- do something when articles is empty -->
+  {% endfor %}
+  ```
+
+- if
+
+  ```django
+  {% if user == 'admin' %}
+  	<!-- 사용자가 admin일 경우 -->
+  {% else %}
+  	<!-- 사용자가 admin이 아닌 경우 -->
+  {% endif%}
+  ```
+
+#### 6.3 주석
+
+```django
+<!-- {# 주석 #} -->
+```
+
+위와 같이 주석 처리를 해야 클라이언트(브라우저 소스보기)에서 완전히 주석처리가 된 것을 알 수 있다.
+
+#### 6.4 Template 상속
+
+반복적인 코드는 줄여나가고 활용할 수 있는 부분은 활용할 수 있게 나누어서 설정할 수 있다.
+
+##### 부모 template file
+
+```django
+<!-- codes -->
+{% block css%}
+{% endblock %}
+<!-- codes -->
+{% block content %}
+{% endblock%}
+<!-- codes -->
+```
+
+##### 자식 template file
+
+```django
+{% extends 'parent.html' %}
+{% block css %}
+<style>
+	<!-- css code -->
+</style>
+{% endblock %}
+
+{% block content %}
+	<!-- block codes-->
+{% endblock %}
+```
 
