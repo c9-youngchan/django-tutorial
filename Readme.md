@@ -8,13 +8,15 @@
 
 ### 3. URL 설정
 
-### 4. View에서 하는 일
+### 4. View에서 하는 일(1)
 
 ### 5. Variable Routing
 
 ### 6. Django Templates Language
 
-### 7. Model 기초
+### 7. View에서 하는 일(2)
+
+### 8. Model 기초
 
 
 
@@ -240,3 +242,65 @@ def index(request, name):
 {% endblock %}
 ```
 
+#### 6.5 forloop
+
+```html
+{{ forloop.counter }}
+{{ forloop.counter0 }}
+```
+
+#### 6.6 built-in tag, filter
+
+```html
+{{ contene|legnth }}
+{{ contene|truncatechars:10 }}
+```
+
+#### 6.7 settings.py
+
+`APP_DIRS:True`: installed_apps에 등록된 app의 모든 templates폴더아래 파일들을 사용한다.
+
+`'DIRS':[os.path.join(BASE_DIR, 'your_project_name', 'templates')]`
+
+- 각 앱 아래에 `templates`디렉토리 아래에 `your_app_name`디렉토리를 만들고 그 아래에 html 파일을 저장한다.
+
+### 7. View에서 하는 일(2)
+
+```python
+def create(request):
+    # request.GET.get('keyword(input name)')
+    # request.method
+    # request.path
+    # 등등 request에 많은 정보가 담겨있다.
+```
+
+`request`는 `HTTPresponse`객체이다.  
+
+[공식문서]: https://docs.djangoproject.com/en/3.0/ref/request-response/
+
+
+
+### 8. Model 기초
+
+#### 8.1 스키마
+
+각각의 열들이 어떤 정보를 어떤 형태로 저장할지 지정할 수 있다.
+
+#### 8.2 테이블
+
+행과 열로 구성되어 있다.
+
+- 행: row, record
+- 열: column, 속성, 필드
+
+#### 8.4 DB조작언어
+
+ `Object Relational Mapping`: 객체 조작 언어
+
+`pip install django-extensions ipython`
+
+- INSTALLED_APPS에 `django-extensions`추가
+
+---
+
+django-CRUD에서 이어서 할 예정
